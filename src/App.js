@@ -1,6 +1,12 @@
 import './App.css';
-import React from 'react';
+import React,{Suspense} from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
+import BigComponent from './Component/BigComponent'
+// import ClassComponent from './Component/classComponent'
+// const ClassComponent = React.lazy(() => import('./Component/classComponent'));
+// const BigComponent = React.lazy(() => import('./Component/BigComponent'));
+
 
 function a(c){
   return c
@@ -8,6 +14,15 @@ function a(c){
 const b= 'rachit'
 
 function App() {
+
+  useEffect(() => {
+    const t0 = performance.now();
+    import('./Component/BigComponent').then(() => {
+      const t1 = performance.now();
+      console.log(`Lazy loading took ${t1 - t0} milliseconds.`,t1,t0);
+    });
+  }, []);
+
   return (
     <div className="App">
       <h1>
@@ -15,6 +30,11 @@ function App() {
       </h1>
       <div id= 'test1'>
       </div>
+      <Suspense fallback={<div>....loading</div>}> 
+      <BigComponent/>
+      </Suspense>
+     
+      
     </div>
   );
 }
